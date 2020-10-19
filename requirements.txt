@@ -1,4 +1,9 @@
 xlrd
 xlwt
 openpyxl
+numpy
+scipy
 pandas
+scikit-learn
+pytorch
+
