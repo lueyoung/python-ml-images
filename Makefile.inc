@@ -6,3 +6,4 @@ LOCAL_REGISTRY=lowyard
 LOCAL_REGISTRY=registry.cn-hangzhou.aliyuncs.com/lowyard
 TAG=latest
 IMAGE=${LOCAL_REGISTRY}/${NAME}:${TAG}
+PROJECT=/home/young/workspace-git/cars

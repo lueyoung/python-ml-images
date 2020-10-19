@@ -2,6 +2,8 @@ include Makefile.inc
 DATE:=$(shell date)
 DOCKER=$(shell which docker)
 
+default_target: run enter
+
 define sed
 	@find ${MANIFEST} -type f -name "*.yaml" | xargs sed -i s?"$(1)"?"$(2)"?g
 endef
@@ -13,7 +15,6 @@ restart: rm mk mv docker
 docker: build run
 all: build push deploy
 
-.PHONY: build push restart docker all rm run clean stop enter test pull
 
 build:
 	@docker $@ -t ${IMAGE} -f Dockerfile .
@@ -24,8 +25,8 @@ push:
 pull:
 	@docker $@ ${IMAGE}
 
-run:
-	${DOCKER} $@ -d -v $(shell pwd)/workspace:/mnt --name ${NAME} --restart=on-failure:5 ${IMAGE} tail -f /dev/null
+run: ln
+	${DOCKER} $@ -d -v $(shell pwd)/src:/workspace -v $(shell pwd)/data:/data --name ${NAME} --restart=on-failure:5 ${IMAGE} tail -f /dev/null
 
 clean: stop rm
 rm: 
@@ -34,6 +35,14 @@ rm:
 stop:
 	-${DOCKER} $@ ${NAME}
 
-enter:
-	docker exec -it ${NAME} /bin/bash
+enter: exec
 
+exec:
+	docker $@ -it ${NAME} /bin/bash
+
+ln:
+	[[ -d $(shell pwd)/data ]] || $@ -sf $(PROJECT)/data $(shell pwd)/data
+	[[ -d $(shell pwd)/src ]] || $@ -sf $(PROJECT)/src $(shell pwd)/src
+
+
+.PHONY: build push restart docker all rm run clean stop enter test pull ln
