@@ -5,5 +5,5 @@ numpy
 scipy
 pandas
 scikit-learn
-pytorch
+torch
 
