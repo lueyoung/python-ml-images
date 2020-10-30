@@ -3,6 +3,7 @@ xlwt
 openpyxl
 numpy
 scipy
+matplotlib
 pandas
 scikit-learn
 torch
